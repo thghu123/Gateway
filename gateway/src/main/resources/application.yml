@@ -1,0 +1,48 @@
+server:
+  port:
+    8080
+
+spring:
+  security:
+    oauth2:
+      client:
+        client-id: auth_id
+        client-secret: auth_secret
+      resource:
+        jwt:
+          key-value: jwt_secret_key
+        id: service
+        tokenInfoUri: http://localhost:8080/oauth/check_token
+
+  cloud:
+    gateway:
+      routes:
+        - id: microservice_mfp
+          predicates:
+            - Path=/mfp/rtm/**
+          uri: "http://localhost:8084"
+#          filters:
+#            - PreOauth2SSOGatewayFilter
+
+        - id: microservice_imx
+          predicates:
+            - Path=/imx/rtm/**
+          uri: "http://localhost:8081"
+#          filters:
+#            - PreOauth2SSOGatewayFilter
+
+
+  h2:
+    console:
+      enabled: true
+  profiles:
+    active: local
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:./data/testdb
+      # 또는 jdbc:h2:tcp://localhost:9092/./data/testdb
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+
+      #      ddl-auto: create

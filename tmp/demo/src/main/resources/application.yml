@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        -   id: google
+            uri: http://google.com
+            predicates:
+              - Path=/drive
+        -   id: facebook
+            uri: http://facebook.com
+            predicates:
+              - Path=/groups
